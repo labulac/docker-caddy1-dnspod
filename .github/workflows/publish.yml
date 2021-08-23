@@ -1,14 +1,28 @@
-name: Publish
+name: main
 
-on: push
-
+on:
+  push:
+    branches: [main]
+  # 定时触发编译(每天早5点)
+  #schedule:
+     #- cron: '0 5 * * *'
+  # 点☆Star触发开始编译
+  #watch:  
+     #types: [started]
+  
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: build & publish
-      run: |
-        docker login -u jayfong -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-        docker build -t jayfong/caddy-dnspod:latest .
-        docker push jayfong/caddy-dnspod:latest
+  build:
+      runs-on: ubuntu-latest
+      name: Build image job
+      steps:
+          - name: Checkout main
+            uses: actions/checkout@master
+          - name: Build and publish image
+            uses: ilteoood/docker_buildx@master
+            with:
+              publish: true
+              imageName: 740162752/caddy1-dnspod
+              platform: linux/amd64,linux/arm64,linux/arm/v7 # 你准备构建的镜像平台
+              tag: latest # 默认latest，可以针对平台，修改tag
+              dockerUser: 740162752 # docker hub userid
+              dockerPassword: ${{ secrets.DOCKER_PASSWORD }} # docker hub password
