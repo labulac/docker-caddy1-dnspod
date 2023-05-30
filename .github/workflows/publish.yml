@@ -22,7 +22,7 @@ jobs:
             with:
               publish: true
               imageName: 740162752/caddy1-dnspod
-              platform: linux/arm64 # 你准备构建的镜像平台
+              platform: linux/arm64 # 你准备构建的镜像
               tag: latest # 默认latest，可以针对平台，修改tag
               dockerUser: 740162752 # docker hub userid
               dockerPassword: ${{ secrets.DOCKER_PASSWORD }} # docker hub password
